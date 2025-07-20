@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "CommandService.Controllers.PlatformController",
+    "Method": "TestInBoundConnection",
+    "RelativePath": "api/c/Platform",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

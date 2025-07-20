@@ -1,0 +1,15 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+    name: platforms-clusterip-srv
+spec:
+    type: NodePort
+    selector:
+        app: platformService
+    ports:
+       - name: platformservice
+         protocol: TCP
+         port: 80
+         targetPort: 8080
+         nodePort: 32538
+    
