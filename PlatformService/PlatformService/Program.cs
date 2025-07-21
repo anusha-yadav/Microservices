@@ -3,6 +3,7 @@ using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Repository.Implementation;
 using PlatformService.Repository.Interfaces;
+using PlatformService.SyncDataServices.Grpc;
 using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ Console.WriteLine($"--> Command Service Endpoint {builder.Configuration["Command
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
+builder.Services.AddGrpc();
 // Register AppDbContext BEFORE builder.Build()
 if (builder.Environment.IsDevelopment())
 {
@@ -43,8 +45,16 @@ app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseRouting();
+app.UseEndpoints(ep =>
+{
+    ep.MapControllers();
+    ep.MapGrpcService<GrpcPlatformService>();
+    ep.MapGet("/protos/platforms.proto", async context =>
+    {
+        await context.Response.WriteAsync(File.ReadAllText("Protos.platforms.proto"));
+    });
+});
 
 PrepDB.PrepPopulation(app, app.Environment.IsProduction());
 

@@ -12,4 +12,7 @@ spec:
          port: 80
          targetPort: 8080
          nodePort: 32538
-    
+       - name: platformgrpc
+         protocol: TCP
+         port: 666
+         targetPort: 666   
